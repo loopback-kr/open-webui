@@ -831,7 +831,13 @@
 
 				reader.readAsDataURL(file['type'] === 'image/heic' ? await convertHeicToJpeg(file) : file);
 			} else {
-				uploadFileHandler(file);
+				// NIfTI volumes are binary but carry no content-type the backend
+				// recognises, so process=true would send them to the RAG text
+				// extractor, which falls through to TextLoader and embeds tens of
+				// thousands of latin-1 mojibake chunks. process=false stores the
+				// bytes as-is for the nifti_viewer tool to read.
+				const isNifti = /\.nii(\.gz)?$/i.test(file.name ?? '');
+				uploadFileHandler(file, !isNifti);
 			}
 		});
 	};
