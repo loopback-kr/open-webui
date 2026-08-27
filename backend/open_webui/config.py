@@ -2133,24 +2133,31 @@ CONTEXT_COMPACTION_PROMPT_TEMPLATE = os.getenv('CONTEXT_COMPACTION_PROMPT_TEMPLA
 TITLE_GENERATION_PROMPT_TEMPLATE = os.getenv('TITLE_GENERATION_PROMPT_TEMPLATE', '')
 
 DEFAULT_TITLE_GENERATION_PROMPT_TEMPLATE = """### Task:
-Generate a concise, 3-5 word title with an emoji summarizing the chat history.
+Generate a concise title summarizing the chat history.
 ### Guidelines:
 - The title should clearly represent the main theme or subject of the conversation.
-- Use emojis that enhance understanding of the topic, but avoid quotation marks or special formatting.
+- Keep it short: 3-5 words is best.
+- Do not use quotation marks, or special formatting.
 - Write the title in the chat's primary language; default to English if multilingual.
-- Prioritize accuracy over excessive creativity; keep it clear and simple.
+- Prioritize accuracy over creativity.
+- If the attached files section below lists a file, extract the UID from its filename:
+  1. Filenames follow the pattern <UID>-<variant>.nii.gz (e.g., "001-flair.nii.gz").
+  2. Remove the full ".nii.gz" double extension.
+  3. The UID is the leading numeric identifier before the first hyphen (e.g., "001-flair.nii.gz" → "001").
+- When a UID is extracted, the title MUST follow this exact format: <UID>: <concise title> (e.g., "001: FLAIR Registration").
+- If no file is attached or no UID can be extracted, output the concise title alone without any UID prefix. Never invent a UID.
+- If multiple files have different UIDs, use the UID most central to the conversation.
 - Your entire response must consist solely of the JSON object, without any introductory or concluding text.
 - The output must be a single, raw JSON object, without any markdown code fences or other encapsulating text.
 - Ensure no conversational text, affirmations, or explanations precede or follow the raw JSON output, as this will cause direct parsing failure.
 ### Output:
 JSON format: { "title": "your concise title here" }
 ### Examples:
-- { "title": "📉 Stock Market Trends" },
-- { "title": "🍪 Perfect Chocolate Chip Recipe" },
-- { "title": "Evolution of Music Streaming" },
-- { "title": "Remote Work Productivity Tips" },
-- { "title": "Artificial Intelligence in Healthcare" },
-- { "title": "🎮 Video Game Development Insights" }
+- { "title": "💀 001: FLAIR Registration" },
+- { "title": "💀 017: Tumor Segmentation" },
+- { "title": "🍪 Chocolate Chip Cookies" },
+- { "title": "💼 Remote Work" }
+### Attached files: {{FILES}}
 ### Chat History:
 <chat_history>
 {{MESSAGES:END:2}}

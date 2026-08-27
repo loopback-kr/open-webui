@@ -207,12 +207,14 @@
 		if (history?.messages && history?.currentId) {
 			msgList = createMessagesList(history, history.currentId).map((m: any) => ({
 				role: m.role,
-				content: getOutputText(m.output) || m.content || ''
+				content: getOutputText(m.output) || m.content || '',
+				files: m.files
 			}));
 		} else {
 			msgList = (chatContent?.messages ?? []).map((m: any) => ({
 				role: m.role,
-				content: getOutputText(m.output) || m.content || ''
+				content: getOutputText(m.output) || m.content || '',
+				files: m.files
 			}));
 		}
 

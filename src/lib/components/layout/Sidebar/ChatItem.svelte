@@ -365,12 +365,14 @@
 		if (history?.messages && history?.currentId) {
 			messages = createMessagesList(history, history.currentId).map((message: any) => ({
 				role: message.role,
-				content: getOutputText(message.output) || message.content || ''
+				content: getOutputText(message.output) || message.content || '',
+				files: message.files
 			}));
 		} else {
 			messages = (chatContent?.messages ?? []).map((message: any) => ({
 				role: message.role,
-				content: getOutputText(message.output) || message.content || ''
+				content: getOutputText(message.output) || message.content || '',
+				files: message.files
 			}));
 		}
 

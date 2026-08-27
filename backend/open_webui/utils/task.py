@@ -257,6 +257,32 @@ def replace_messages_variable(
     return template
 
 
+def replace_files_variable(template: str, messages: Optional[list[dict]] = None) -> str:
+    """Replace {{FILES}} with the names of the files attached anywhere in the conversation.
+
+    The rendered message text ({{MESSAGES}}) carries only role/content, so attachment
+    names are otherwise invisible to task prompts. When nothing is attached the whole
+    line holding the variable is dropped, so the prompt does not carry an empty section.
+    """
+    filenames = []
+
+    for message in messages or []:
+        for file in message.get('files') or []:
+            if not isinstance(file, dict):
+                continue
+
+            file_info = file.get('file')
+            name = file.get('name') or (file_info.get('filename') if isinstance(file_info, dict) else None)
+
+            if name and name not in filenames:
+                filenames.append(name)
+
+    if not filenames:
+        return re.sub(r'^[^\n]*\{\{FILES\}\}[^\n]*\n?', '', template, flags=re.M)
+
+    return template.replace('{{FILES}}', ', '.join(filenames))
+
+
 # {{prompt:middletruncate:8000}}
 
 
@@ -303,6 +329,8 @@ async def rag_template(template: str, context: str, query: str):
 
 async def title_generation_template(template: str, messages: list[dict], user: Optional[Any] = None) -> str:
     prompt = get_last_user_message(messages)
+    # Substituted before the message text is injected, so user content cannot forge the variable
+    template = replace_files_variable(template, messages)
     template = replace_prompt_variable(template, prompt)
     template = replace_messages_variable(template, messages)
 
