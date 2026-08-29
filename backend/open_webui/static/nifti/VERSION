@@ -1,0 +1,9 @@
+@niivue/niivue 0.69.0
+file:   dist/niivue.umd.js (published UMD build, copied verbatim)
+note:   the UMD file is shipped but NOT declared in the package's "exports"
+        map, so it is reachable only by filesystem path.
+sha256: 47b896b77ec4a5be3ef1949c33ad393b6f45629921f326c279000bcf51bdb4af
+bytes:  2284381
+
+Vendored by scripts/prepare-niivue.js -- run `npm run niivue:vendor` after
+bumping @niivue/niivue in package.json. Do not edit this directory by hand.
