@@ -19,9 +19,11 @@
 		"i18n:parse": "i18next --config i18next-parser.config.ts && prettier --write \"src/lib/i18n/**/*.{js,json}\"",
 		"cy:open": "cypress open",
 		"test:frontend": "vitest --passWithNoTests",
-		"pyodide:fetch": "node scripts/prepare-pyodide.js"
+		"pyodide:fetch": "node scripts/prepare-pyodide.js",
+		"niivue:vendor": "node scripts/prepare-niivue.js"
 	},
 	"devDependencies": {
+		"@niivue/niivue": "^0.69.0",
 		"@sveltejs/adapter-auto": "3.2.2",
 		"@sveltejs/adapter-static": "^3.0.2",
 		"@sveltejs/kit": "^2.5.27",
@@ -37,6 +39,7 @@
 		"eslint-plugin-cypress": "^3.4.0",
 		"eslint-plugin-svelte": "^2.45.1",
 		"i18next-parser": "^9.0.1",
+		"jsdom": "^30.0.1",
 		"postcss": "^8.4.31",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.6",
@@ -47,6 +50,7 @@
 		"tailwindcss": "^4.0.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.5.4",
+		"undici": "^8.10.0",
 		"vite": "^5.4.21",
 		"vitest": "^1.6.1"
 	},
@@ -144,7 +148,6 @@
 		"tippy.js": "^6.3.7",
 		"turndown": "^7.2.0",
 		"turndown-plugin-gfm": "^1.0.2",
-		"undici": "^7.28.0",
 		"uuid": "^11.1.1",
 		"vega": "^6.2.0",
 		"vega-lite": "^6.4.1",
